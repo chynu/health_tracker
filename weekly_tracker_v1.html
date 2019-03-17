@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Health Tracker</title>
+</head>
+<style>
+body {
+  font-family: 'Avenir', 'Comic Sans', Arial;
+}
+.c {
+  text-align: center;
+}
+.header {
+  font-size: 20px;
+  text-transform: uppercase;
+  border-bottom: 1px solid gray;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+table {
+  text-align: center;
+  width: 100%;
+}
+tr:not(:first-child) td:not(:first-child) {
+  border: 1px solid gray;
+}
+
+#yearly table {
+  font-size: 10px;
+}
+#yearly tr:not(:first-child) td:not(:first-child) {
+  padding-top: 15px;
+  min-width: 20px;
+}
+
+#weekly table {
+  font-size: 14px;
+}
+#weekly tr:not(:first-child) td:not(:first-child) {
+  padding-top: 100px;
+  min-width: 100px;
+}
+</style>
+<body>
+<div class="c header">Spring 2019 health tracker</div>
+
+<div id="weekly"></div>
+<br><br><Br>
+
+<div id="yearly"></div>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+createYearly();
+createWeekly();
+
+function createWeekly() {
+  const COL_TITLES = ['', 'Breakfast', 'Lunch', 'Dinner', 'Snacks'];
+  let N = COL_TITLES.length;
+  let DOW = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(d => '<b>'+d+'</b>');
+
+  let final_array = [COL_TITLES];
+
+  for (let i = 0; i < DOW.length; i++) {
+    let arr = emptyArray(N-1);
+    arr.splice(0,0,DOW[i]);
+    final_array.push(arr);
+  }
+
+  createTable($('#weekly'), final_array);
+}
+
+function createYearly() {
+  let num_months = 3;
+  let months = ['<b>MAR</b>', '<b>APR</b>', '<b>MAY</b>'];
+
+  let days_row = [...Array(31).keys()].map((d) => d+1);
+  days_row.splice(0,0,'');
+
+  let final_array = [days_row];
+
+  for (let i = 0; i < num_months; i++) {
+    let arr = emptyArray(31);
+    arr.splice(0,0,months[i]);
+    final_array.push(arr);
+  }
+
+  createTable($('#yearly'), final_array);
+}
+
+function createTable(domObject, data) {
+  let txt = '<table>\n' + data.reduce((str, row) => str + tr(row) + '\n', '') + '</table>';
+  console.log(txt);
+  domObject.append(txt);
+}
+
+function td(text, opt_attr) {
+  return '\t<td' + (opt_attr ? ' ' + opt_attr: '') + '>' + text + '</td>\n';
+}
+
+function tr(arr) {
+  return '<tr>\n' + arr.reduce((str,d) => str + td(d), '') + '</tr>';
+}
+
+function emptyArray(n) {
+  return [...Array(n).keys()].map((d) => '');
+}
+</script>
+</html>
